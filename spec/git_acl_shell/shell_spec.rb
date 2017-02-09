@@ -42,6 +42,17 @@ describe GitAclShell do
       expect(shell.exec(command)).to be false
       expect(kernel.args).to eq nil
     end
+
+    it "allows a command with appended space and semicolon, delegating to git-* to fail it" do
+      kernel = CapturingKernel.new
+      shell = GitAclShell::Shell.new('some-key-id', kernel: kernel)
+
+      command = "git-upload-pack /home/git/alias.git ; rm -rf tmp"
+
+      expect(shell.exec(command)).to be true
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/alias.git",
+        ";", "rm", "-rf", "tmp"]
+    end
   end
 
   describe "access control" do
