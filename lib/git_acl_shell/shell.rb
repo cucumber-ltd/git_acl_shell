@@ -6,18 +6,20 @@ module GitAclShell
     #                     (git push)       (git fetch)     (git archive)
     COMMAND_WHITELIST = %w(git-receive-pack git-upload-pack git-upload-archive).freeze
 
-    def initialize(key_id, acl:, kernel:, stderr:)
-      @key_id = key_id
-      @acl    = acl
-      @kernel = kernel
-      @stderr = stderr
+    def initialize(key_id, acl:, directory:, kernel:, stderr:)
+      @key_id    = key_id
+      @acl       = acl
+      @directory = directory
+      @kernel    = kernel
+      @stderr    = stderr
     end
 
     def exec(command)
       args = Shellwords.shellwords(command)
       if whitelist?(args)
-        repo_path = args.last
-        if @acl.authorized?(@key_id, repo_path)
+        repo_alias = args.pop
+        if @acl.authorized?(@key_id, repo_alias)
+          args.push(@directory.lookup(repo_alias))
           @kernel.exec(*args)
           true
         else

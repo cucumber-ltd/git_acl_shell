@@ -9,6 +9,12 @@ class CapturingKernel
   end
 end
 
+class IdentityDirectory
+  def lookup(repo_alias)
+    repo_alias
+  end
+end
+
 describe GitAclShell do
   it "has a version number" do
     expect(GitAclShell::VERSION).not_to be nil
@@ -16,23 +22,19 @@ describe GitAclShell do
 
   let(:kernel) { CapturingKernel.new }
   let(:stderr) { StringIO.new }
-  let(:permissive_acl) { double(:acl, authorized?: true) }
+  let(:acl) { double(:acl, authorized?: true) }
+  let(:directory) { IdentityDirectory.new }
+  let(:shell) { GitAclShell::Shell.new('some-key-id', acl: acl, directory: directory, kernel: kernel, stderr: stderr) }
 
   describe "commands" do
     it "allows `git-upload-pack`" do
-      kernel = CapturingKernel.new
-      shell = GitAclShell::Shell.new('some-key-id', acl: permissive_acl, kernel: kernel, stderr: stderr)
-
-      command = "git-upload-pack '/home/git/alias.git'"
+      command = "git-upload-pack '/home/git/repo-name.git'"
 
       expect(shell.exec(command)).to be true
-      expect(kernel.args).to eq ["git-upload-pack", "/home/git/alias.git"]
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
     end
 
     it "does not allow `rm`" do
-      kernel = CapturingKernel.new
-      shell = GitAclShell::Shell.new('some-key-id', acl: permissive_acl, kernel: kernel, stderr: stderr)
-
       command = "rm -rf tmp"
 
       expect(shell.exec(command)).to be false
@@ -40,9 +42,6 @@ describe GitAclShell do
     end
 
     it "does not allow a command with appended semicolon" do
-      kernel = CapturingKernel.new
-      shell = GitAclShell::Shell.new('some-key-id', acl: permissive_acl, kernel: kernel, stderr: stderr)
-
       command = "git-upload-pack;rm -rf tmp"
 
       expect(shell.exec(command)).to be false
@@ -50,21 +49,18 @@ describe GitAclShell do
     end
 
     it "allows a command with appended space and semicolon, delegating to git-* to fail it" do
-      kernel = CapturingKernel.new
-      shell = GitAclShell::Shell.new('some-key-id', acl: permissive_acl, kernel: kernel, stderr: stderr)
-
-      command = "git-upload-pack /home/git/alias.git ; rm -rf tmp"
+      command = "git-upload-pack /home/git/repo-name.git ; rm -rf tmp"
 
       expect(shell.exec(command)).to be true
-      expect(kernel.args).to eq ["git-upload-pack", "/home/git/alias.git", ";", "rm", "-rf", "tmp"]
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git", ";", "rm", "-rf", "tmp"]
     end
   end
 
   describe "access control" do
+    let(:acl) { double(:acl) }
+
     it "denies access to unauthorized keys" do
-      acl = double(:acl)
       expect(acl).to receive(:authorized?).with('some-key-id', "/home/git/some repo.git").and_return(false)
-      shell = GitAclShell::Shell.new('some-key-id', acl: acl, kernel: kernel, stderr: stderr)
 
       command = "git-upload-pack '/home/git/some repo.git'"
 
@@ -75,6 +71,15 @@ describe GitAclShell do
   end
 
   describe "aliasing" do
+    let(:directory) { double(:directory) }
 
+    it "allows `git-upload-pack`" do
+      expect(directory).to receive(:lookup).with("/home/git/alias.git").and_return("/home/git/repo-name.git")
+
+      command = "git-upload-pack '/home/git/alias.git'"
+
+      expect(shell.exec(command)).to be true
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
+    end
   end
 end
