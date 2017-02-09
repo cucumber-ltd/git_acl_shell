@@ -1,3 +1,12 @@
 #!/usr/bin/env ruby
 
-require "git/acl/shell"
+require "git_acl_shell/shell"
+
+command = ENV.delete('SSH_ORGINAL_COMMAND')
+key_id  = ARGV[0]
+
+if GitAclShell::Shell.new(key_id).exec(command, stderr: $stderr, stdout: $stdout)
+  exit 0
+else
+  exit 1
+end

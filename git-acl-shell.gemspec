@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'git/acl/shell/version'
+require 'git_acl_shell/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "git-acl-shell"
-  spec.version       = Git::Acl::Shell::VERSION
+  spec.version       = GitAclShell::VERSION
   spec.authors       = ["Cucumber Ltd"]
   spec.email         = ["devs@cucumber.io"]
 
