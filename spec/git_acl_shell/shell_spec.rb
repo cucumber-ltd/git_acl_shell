@@ -1,9 +1,9 @@
 require "spec_helper"
 class CapturingKernel
-  attr_reader :command
+  attr_reader :args
 
-  def exec(command)
-    @command = command
+  def exec(*args)
+    @args = args
   end
 end
 
@@ -12,7 +12,7 @@ describe GitAclShell do
     expect(GitAclShell::VERSION).not_to be nil
   end
 
-  describe "allowed commands" do
+  describe "commands" do
     it "allows `git-upload-pack`" do
       kernel = CapturingKernel.new
       shell = GitAclShell::Shell.new('some-key-id', kernel: kernel)
@@ -20,7 +20,7 @@ describe GitAclShell do
       command = "git-upload-pack '/home/git/alias.git'"
 
       expect(shell.exec(command)).to be true
-      expect(kernel.command).to eq command
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/alias.git"]
     end
 
     it "does not allow `rm`" do
@@ -30,7 +30,17 @@ describe GitAclShell do
       command = "rm -rf tmp"
 
       expect(shell.exec(command)).to be false
-      expect(kernel.command).to be nil
+      expect(kernel.args).to be nil
+    end
+
+    it "does not allow a command with appended semicolon" do
+      kernel = CapturingKernel.new
+      shell = GitAclShell::Shell.new('some-key-id', kernel: kernel)
+
+      command = "git-upload-pack;rm -rf tmp"
+
+      expect(shell.exec(command)).to be false
+      expect(kernel.args).to eq nil
     end
   end
 

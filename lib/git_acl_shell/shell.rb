@@ -12,8 +12,9 @@ module GitAclShell
     end
 
     def exec(command)
-      if whitelist?(command)
-        @kernel.exec(command)
+      args = Shellwords.shellwords(command)
+      if whitelist?(args)
+        @kernel.exec(*args)
         true
       else
         false
@@ -22,11 +23,9 @@ module GitAclShell
 
     private
 
-    def whitelist?(command)
-      args = Shellwords.shellwords(command)
+    def whitelist?(args)
       program = args[0]
       COMMAND_WHITELIST.include?(program)
     end
-
   end
 end
