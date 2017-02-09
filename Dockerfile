@@ -1,5 +1,5 @@
-FROM ruby:2.4.0
-RUN apt-get update -qq && apt-get install -y build-essential
+FROM ruby:2.4.0-alpine
+RUN apk add --no-cache --update --upgrade bash git build-base
 RUN mkdir /work
 WORKDIR /work
 ADD . /work
