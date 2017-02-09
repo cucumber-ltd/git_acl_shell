@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'git_acl_shell/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "git-acl-shell"
+  spec.name          = "git_acl_shell"
   spec.version       = GitAclShell::VERSION
   spec.authors       = ["Cucumber Ltd"]
   spec.email         = ["devs@cucumber.io"]
