@@ -21,6 +21,22 @@
         },
         "body": "/home/git/real-name.git"
       }
+    },
+    {
+      "description": "a lookup",
+      "provider_state": "an alias is not defined",
+      "request": {
+        "method": "get",
+        "path": "/real-name",
+        "query": "alias=/home/git/unknown-alias.git"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "text/plain; charset=utf-8"
+        },
+        "body": ""
+      }
     }
   ],
   "metadata": {

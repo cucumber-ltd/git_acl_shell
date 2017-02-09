@@ -15,12 +15,14 @@ class IdentityDirectory
   end
 end
 
-describe GitAclShell::Shell do
+module GitAclShell
+
+describe Shell do
   let(:kernel) { CapturingKernel.new }
   let(:stderr) { StringIO.new }
   let(:acl) { double(:acl, authorized?: true) }
   let(:directory) { IdentityDirectory.new }
-  let(:shell) { GitAclShell::Shell.new('some-key-id', acl: acl, directory: directory, kernel: kernel, stderr: stderr) }
+  let(:shell) { Shell.new('some-key-id', acl: acl, directory: directory, kernel: kernel, stderr: stderr) }
 
   describe "commands" do
     it "allows `git-upload-pack`" do
@@ -69,7 +71,7 @@ describe GitAclShell::Shell do
   describe "aliasing" do
     let(:directory) { double(:directory) }
 
-    it "allows `git-upload-pack`" do
+    it "uses the real name looked up from the directory in the command" do
       expect(directory).to receive(:lookup).with("/home/git/alias.git").and_return("/home/git/repo-name.git")
 
       command = "git-upload-pack '/home/git/alias.git'"
@@ -77,5 +79,19 @@ describe GitAclShell::Shell do
       expect(shell.exec(command)).to be true
       expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
     end
+
+    it "does not execute if the alias is unknown" do
+      expect(directory).to receive(:lookup).and_raise(UnknownAlias)
+
+      command = "git-upload-pack '/home/git/alias.git'"
+
+      expect(shell.exec(command)).to be false
+      expect(kernel.args).to be_nil
+
+      stderr.rewind
+      expect(stderr.read).to eq "Not found\n"
+    end
   end
+end
+
 end

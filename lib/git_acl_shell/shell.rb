@@ -19,7 +19,13 @@ module GitAclShell
       if whitelist?(args)
         repo_alias = args.pop
         if @acl.authorized?(@key_id, repo_alias)
-          args.push(@directory.lookup(repo_alias))
+          begin
+            args.push(@directory.lookup(repo_alias))
+          rescue UnknownAlias
+            @stderr.puts("Not found")
+            return false
+          end
+
           @kernel.exec(*args)
           true
         else
