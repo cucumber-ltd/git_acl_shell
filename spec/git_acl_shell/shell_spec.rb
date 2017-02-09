@@ -15,11 +15,7 @@ class IdentityDirectory
   end
 end
 
-describe GitAclShell do
-  it "has a version number" do
-    expect(GitAclShell::VERSION).not_to be nil
-  end
-
+describe GitAclShell::Shell do
   let(:kernel) { CapturingKernel.new }
   let(:stderr) { StringIO.new }
   let(:acl) { double(:acl, authorized?: true) }
