@@ -13,7 +13,7 @@ describe GitAclShell do
   end
 
   describe "allowed commands" do
-    it "allows git-upload-pack" do
+    it "allows `git-upload-pack`" do
       kernel = CapturingKernel.new
       shell = GitAclShell::Shell.new('some-key-id', kernel: kernel)
 
@@ -23,6 +23,15 @@ describe GitAclShell do
       expect(kernel.command).to eq command
     end
 
+    it "does not allow `rm`" do
+      kernel = CapturingKernel.new
+      shell = GitAclShell::Shell.new('some-key-id', kernel: kernel)
+
+      command = "rm -rf tmp"
+
+      expect(shell.exec(command)).to be false
+      expect(kernel.command).to be nil
+    end
   end
 
   describe "access control" do
