@@ -13,7 +13,7 @@ describe HTTPDirectory, :pact => true do
 
   describe "successful lookup" do
     before do
-      alias_service.given("an alias is defined").
+      acl_service.given("an alias is defined").
         upon_receiving("a lookup").
         with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git').
         will_respond_with(
@@ -29,7 +29,7 @@ describe HTTPDirectory, :pact => true do
 
   describe "unsuccesful lookup" do
     before do
-      alias_service.given("an alias is not defined").
+      acl_service.given("an alias is not defined").
         upon_receiving("a lookup").
         with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git').
         will_respond_with(
