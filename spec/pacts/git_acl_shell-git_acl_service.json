@@ -1,0 +1,29 @@
+{
+  "consumer": {
+    "name": "Git ACL Shell"
+  },
+  "provider": {
+    "name": "Git ACL Service"
+  },
+  "interactions": [
+    {
+      "description": "a lookup",
+      "provider_state": "an alias is defined",
+      "request": {
+        "method": "get",
+        "path": "/real-name",
+        "query": "alias=/home/git/alias.git"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/plain; charset=utf-8"
+        },
+        "body": "/home/git/real-name.git"
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecificationVersion": "1.0.0"
+  }
+}
