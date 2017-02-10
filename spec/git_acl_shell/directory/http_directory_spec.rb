@@ -14,24 +14,24 @@ describe HTTPDirectory, :pact => true do
   it "returns the real name when an alias exists" do
     acl_service.given("alias is an alias of real-name")
       .upon_receiving("a real repo name lookup by alias")
-      .with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git')
+      .with(method: :get, path: '/real-name', query: 'alias=alias-for-the-real-repo')
       .will_respond_with(
         status: 200,
         headers: {'Content-Type' => 'text/plain; charset=utf-8'},
-        body: '/home/git/real-name.git'
+        body: 'the-real-repo'
       )
-    expect(directory.lookup('/home/git/alias.git')).to eq('/home/git/real-name.git')
+    expect(directory.lookup('alias-for-the-real-repo')).to eq('the-real-repo')
   end
 
   it "raises an UnknownAlias error when the alias does not exist" do
     acl_service.given("an unknown alias")
       .upon_receiving("a real repo name lookup by alias")
-      .with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git')
+      .with(method: :get, path: '/real-name', query: 'alias=unknown-alias')
       .will_respond_with(
         status: 404,
         headers: {'Content-Type' => 'text/plain; charset=utf-8'},
         body: '' )
-    expect { directory.lookup('/home/git/unknown-alias.git') }.to raise_error(UnknownAlias)
+    expect { directory.lookup('unknown-alias') }.to raise_error(UnknownAlias)
   end
 end
 

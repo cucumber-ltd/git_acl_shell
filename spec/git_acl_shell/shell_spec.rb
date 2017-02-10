@@ -50,7 +50,7 @@ describe Shell do
       command = "git-upload-pack /home/git/repo-name.git ; rm -rf tmp"
 
       expect(shell.exec(command)).to be true
-      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git", ";", "rm", "-rf", "tmp"]
+      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git", ";", "rm", "-rf", "./tmp"]
     end
   end
 
@@ -58,7 +58,7 @@ describe Shell do
     let(:acl) { double(:acl) }
 
     it "denies access to unauthorized keys" do
-      expect(acl).to receive(:authorized?).with('some-key-id', "/home/git/some repo.git").and_return(false)
+      expect(acl).to receive(:authorized?).with("some-key-id", "some repo").and_return(false)
 
       command = "git-upload-pack '/home/git/some repo.git'"
 
@@ -72,7 +72,7 @@ describe Shell do
     let(:directory) { double(:directory) }
 
     it "uses the real name looked up from the directory in the command" do
-      expect(directory).to receive(:lookup).with("/home/git/alias.git").and_return("/home/git/repo-name.git")
+      expect(directory).to receive(:lookup).with("alias").and_return("repo-name")
 
       command = "git-upload-pack '/home/git/alias.git'"
 

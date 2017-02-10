@@ -8,11 +8,11 @@
   "interactions": [
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is allowed to access /home/git/alias.git",
+      "provider_state": "some-key-id is allowed to access alias-for-the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&alias=/home/git/alias.git"
+        "query": "keyId=some-key-id&alias=alias-for-the-real-repo"
       },
       "response": {
         "status": 200,
@@ -22,11 +22,11 @@
     },
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is not allowed to access /home/git/alias.git",
+      "provider_state": "some-key-id is not allowed to access alias-for-the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&alias=/home/git/alias.git"
+        "query": "keyId=some-key-id&alias=alias-for-the-real-repo"
       },
       "response": {
         "status": 403,
@@ -40,14 +40,14 @@
       "request": {
         "method": "get",
         "path": "/real-name",
-        "query": "alias=/home/git/alias.git"
+        "query": "alias=alias-for-the-real-repo"
       },
       "response": {
         "status": 200,
         "headers": {
           "Content-Type": "text/plain; charset=utf-8"
         },
-        "body": "/home/git/real-name.git"
+        "body": "the-real-repo"
       }
     },
     {
@@ -56,7 +56,7 @@
       "request": {
         "method": "get",
         "path": "/real-name",
-        "query": "alias=/home/git/unknown-alias.git"
+        "query": "alias=unknown-alias"
       },
       "response": {
         "status": 404,
