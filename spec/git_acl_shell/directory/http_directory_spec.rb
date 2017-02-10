@@ -11,37 +11,27 @@ describe HTTPDirectory, :pact => true do
 
   let(:directory) { HTTPDirectory.new }
 
-  describe "successful lookup" do
-    before do
-      acl_service.given("alias is an alias of real-name")
-        .upon_receiving("a real repo name lookup by alias")
-        .with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git')
-        .will_respond_with(
-          status: 200,
-          headers: {'Content-Type' => 'text/plain; charset=utf-8'},
-          body: '/home/git/real-name.git'
-        )
-    end
-
-    it "returns the real name" do
-      expect(directory.lookup('/home/git/alias.git')).to eq('/home/git/real-name.git')
-    end
+  it "returns the real name when an alias exists" do
+    acl_service.given("alias is an alias of real-name")
+      .upon_receiving("a real repo name lookup by alias")
+      .with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git')
+      .will_respond_with(
+        status: 200,
+        headers: {'Content-Type' => 'text/plain; charset=utf-8'},
+        body: '/home/git/real-name.git'
+      )
+    expect(directory.lookup('/home/git/alias.git')).to eq('/home/git/real-name.git')
   end
 
-  describe "unsuccesful lookup" do
-    before do
-      acl_service.given("an unknown alias")
-        .upon_receiving("a real repo name lookup by alias")
-        .with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git')
-        .will_respond_with(
-          status: 404,
-          headers: {'Content-Type' => 'text/plain; charset=utf-8'},
-          body: '' )
-    end
-
-    it "raises an UnknownAlias error" do
-      expect { directory.lookup('/home/git/unknown-alias.git') }.to raise_error(UnknownAlias)
-    end
+  it "raises an UnknownAlias error when the alias does not exist" do
+    acl_service.given("an unknown alias")
+      .upon_receiving("a real repo name lookup by alias")
+      .with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git')
+      .will_respond_with(
+        status: 404,
+        headers: {'Content-Type' => 'text/plain; charset=utf-8'},
+        body: '' )
+    expect { directory.lookup('/home/git/unknown-alias.git') }.to raise_error(UnknownAlias)
   end
 end
 
