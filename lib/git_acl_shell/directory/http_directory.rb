@@ -7,7 +7,7 @@ module GitAclShell
 
       def lookup(repo_alias)
         # TODO: URL encode
-        response = self.class.get("/real-name?alias=" + repo_alias)
+        response = self.class.get("/real-name?alias=#{repo_alias}")
         if response.ok?
           return response.body
         else

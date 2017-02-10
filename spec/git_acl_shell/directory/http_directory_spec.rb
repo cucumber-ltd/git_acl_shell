@@ -13,13 +13,14 @@ describe HTTPDirectory, :pact => true do
 
   describe "successful lookup" do
     before do
-      acl_service.given("an alias is defined").
-        upon_receiving("a lookup").
-        with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git').
-        will_respond_with(
+      acl_service.given("alias is an alias of real-name")
+        .upon_receiving("a real repo name lookup by alias")
+        .with(method: :get, path: '/real-name', query: 'alias=/home/git/alias.git')
+        .will_respond_with(
           status: 200,
           headers: {'Content-Type' => 'text/plain; charset=utf-8'},
-          body: '/home/git/real-name.git' )
+          body: '/home/git/real-name.git'
+        )
     end
 
     it "returns the real name" do
@@ -29,10 +30,10 @@ describe HTTPDirectory, :pact => true do
 
   describe "unsuccesful lookup" do
     before do
-      acl_service.given("an alias is not defined").
-        upon_receiving("a lookup").
-        with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git').
-        will_respond_with(
+      acl_service.given("an unknown alias")
+        .upon_receiving("a real repo name lookup by alias")
+        .with(method: :get, path: '/real-name', query: 'alias=/home/git/unknown-alias.git')
+        .will_respond_with(
           status: 404,
           headers: {'Content-Type' => 'text/plain; charset=utf-8'},
           body: '' )

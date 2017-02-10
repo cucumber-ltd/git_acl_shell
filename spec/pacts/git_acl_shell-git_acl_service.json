@@ -7,8 +7,36 @@
   },
   "interactions": [
     {
-      "description": "a lookup",
-      "provider_state": "an alias is defined",
+      "description": "a permission request",
+      "provider_state": "some-key-id is allowed to access /home/git/alias.git",
+      "request": {
+        "method": "get",
+        "path": "/permission",
+        "query": "keyId=some-key-id&alias=/home/git/alias.git"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        }
+      }
+    },
+    {
+      "description": "a permission request",
+      "provider_state": "some-key-id is not allowed to access /home/git/alias.git",
+      "request": {
+        "method": "get",
+        "path": "/permission",
+        "query": "keyId=some-key-id&alias=/home/git/alias.git"
+      },
+      "response": {
+        "status": 403,
+        "headers": {
+        }
+      }
+    },
+    {
+      "description": "a real repo name lookup by alias",
+      "provider_state": "alias is an alias of real-name",
       "request": {
         "method": "get",
         "path": "/real-name",
@@ -23,8 +51,8 @@
       }
     },
     {
-      "description": "a lookup",
-      "provider_state": "an alias is not defined",
+      "description": "a real repo name lookup by alias",
+      "provider_state": "an unknown alias",
       "request": {
         "method": "get",
         "path": "/real-name",
