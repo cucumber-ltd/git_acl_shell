@@ -27,10 +27,7 @@ describe HTTPDirectory, :pact => true do
     acl_service.given("an unknown alias")
       .upon_receiving("a real repo name lookup by alias")
       .with(method: :get, path: '/real-name', query: 'alias=unknown-alias')
-      .will_respond_with(
-        status: 404,
-        headers: {'Content-Type' => 'text/plain; charset=utf-8'},
-        body: '' )
+      .will_respond_with(status: 404)
     expect { directory.lookup('unknown-alias') }.to raise_error(UnknownAlias)
   end
 end
