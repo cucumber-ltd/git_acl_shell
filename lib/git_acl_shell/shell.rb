@@ -20,16 +20,17 @@ module GitAclShell
         repo_path = args.pop
         repo_extension = File.extname(repo_path)
         repo_alias = File.basename(repo_path, repo_extension)
-        if @acl.authorized?(@key_id, repo_alias)
-          begin
-            repo_name = @directory.lookup(repo_alias)
-            repo_path = File.join(File.dirname(repo_path), "#{repo_name}#{repo_extension}")
-            args.push(repo_path)
-          rescue UnknownAlias
-            @stderr.puts("Not found")
-            return false
-          end
 
+        begin
+          repo_name = @directory.lookup(repo_alias)
+          repo_path = File.join(File.dirname(repo_path), "#{repo_name}#{repo_extension}")
+          args.push(repo_path)
+        rescue UnknownAlias
+          @stderr.puts("Not found")
+          return false
+        end
+
+        if @acl.authorized?(@key_id, repo_name)
           @kernel.exec(*args)
           true
         else

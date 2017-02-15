@@ -56,9 +56,10 @@ describe Shell do
 
   describe "access control" do
     let(:acl) { double(:acl) }
+    let(:directory) { double(:directory, lookup: "the-real-name") }
 
     it "denies access to unauthorized keys" do
-      expect(acl).to receive(:authorized?).with("some-key-id", "some repo").and_return(false)
+      expect(acl).to receive(:authorized?).with("some-key-id", "the-real-name").and_return(false)
 
       command = "git-upload-pack '/home/git/some repo.git'"
 

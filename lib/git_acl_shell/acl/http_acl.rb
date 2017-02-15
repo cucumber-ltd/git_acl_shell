@@ -5,8 +5,8 @@ module GitAclShell
     class HTTPAcl
       include HTTParty
 
-      def authorized?(key_id, repo_alias)
-        response = self.class.get("/permission", query: { keyId: key_id, alias: repo_alias })
+      def authorized?(key_id, repo_name)
+        response = self.class.get("/permission", query: { keyId: key_id, name: repo_name })
         response.ok?
       end
     end

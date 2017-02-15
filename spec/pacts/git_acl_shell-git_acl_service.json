@@ -8,11 +8,11 @@
   "interactions": [
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is allowed to access alias-for-the-real-repo",
+      "provider_state": "some-key-id is allowed to access the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&alias=alias-for-the-real-repo"
+        "query": "keyId=some-key-id&name=the-real-repo"
       },
       "response": {
         "status": 200,
@@ -22,11 +22,11 @@
     },
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is not allowed to access alias-for-the-real-repo",
+      "provider_state": "some-key-id is not allowed to access the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&alias=alias-for-the-real-repo"
+        "query": "keyId=some-key-id&name=the-real-repo"
       },
       "response": {
         "status": 403,

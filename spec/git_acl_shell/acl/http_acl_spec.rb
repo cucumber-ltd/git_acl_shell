@@ -12,21 +12,21 @@ describe HTTPAcl, :pact => true do
   let(:acl) { HTTPAcl.new }
 
   it "grants access when the key id is allowed to access the repo" do
-    acl_service.given("some-key-id is allowed to access alias-for-the-real-repo")
+    acl_service.given("some-key-id is allowed to access the-real-repo")
       .upon_receiving("a permission request")
-      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&alias=alias-for-the-real-repo')
+      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&name=the-real-repo')
       .will_respond_with(status: 200)
 
-    expect(acl.authorized?('some-key-id', 'alias-for-the-real-repo')).to be true
+    expect(acl.authorized?('some-key-id', 'the-real-repo')).to be true
   end
 
   it "denies access when the key id is not allowed to access the repo" do
-    acl_service.given("some-key-id is not allowed to access alias-for-the-real-repo")
+    acl_service.given("some-key-id is not allowed to access the-real-repo")
       .upon_receiving("a permission request")
-      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&alias=alias-for-the-real-repo')
+      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&name=the-real-repo')
       .will_respond_with(status: 403)
 
-    expect(acl.authorized?('some-key-id', 'alias-for-the-real-repo')).to be false
+    expect(acl.authorized?('some-key-id', 'the-real-repo')).to be false
   end
 end
 
