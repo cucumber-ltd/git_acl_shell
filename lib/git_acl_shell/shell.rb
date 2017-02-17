@@ -1,4 +1,5 @@
 require 'shellwords'
+require 'git_acl_shell/errors'
 
 module GitAclShell
   class Shell
@@ -6,7 +7,7 @@ module GitAclShell
     #                     (git push)       (git fetch)     (git archive)
     COMMAND_WHITELIST = %w(git-receive-pack git-upload-pack git-upload-archive).freeze
 
-    def initialize(key_id, acl:, directory:, kernel:, stderr:)
+    def initialize(key_id, acl:, directory:, kernel: Kernel, stderr: $stderr)
       @key_id    = key_id
       @acl       = acl
       @directory = directory

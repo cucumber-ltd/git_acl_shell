@@ -1,11 +1,22 @@
 #!/usr/bin/env ruby
 
 require "git_acl_shell/shell"
+require "git_acl_shell/acl/http_acl"
+require "git_acl_shell/directory/http_directory"
 
-command = ENV.delete('SSH_ORGINAL_COMMAND')
+command = ENV.delete('SSH_ORIGINAL_COMMAND')
 key_id  = ARGV[0]
+base_uri = ARGV[1]
+GitAclShell::Acl::HTTPAcl.base_uri(base_uri)
+GitAclShell::Directory::HTTPDirectory.base_uri(base_uri)
 
-if GitAclShell::Shell.new(key_id).exec(command, stderr: $stderr, stdout: $stdout)
+shell = GitAclShell::Shell.new(
+  key_id,
+  acl: GitAclShell::Acl::HTTPAcl.new,
+  directory: GitAclShell::Directory::HTTPDirectory.new
+)
+
+if shell.exec(command)
   exit 0
 else
   exit 1

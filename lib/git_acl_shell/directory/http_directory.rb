@@ -1,4 +1,5 @@
 require 'httparty'
+require 'git_acl_shell/errors'
 
 module GitAclShell
   module Directory
