@@ -12,7 +12,7 @@
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&name=the-real-repo"
+        "query": "key-id=some-key-id&repo-base-name=the-real-repo"
       },
       "response": {
         "status": 200,
@@ -26,7 +26,7 @@
       "request": {
         "method": "get",
         "path": "/permission",
-        "query": "keyId=some-key-id&name=the-real-repo"
+        "query": "key-id=some-key-id&repo-base-name=the-real-repo"
       },
       "response": {
         "status": 403,
@@ -35,11 +35,11 @@
       }
     },
     {
-      "description": "a real repo name lookup by alias",
-      "provider_state": "alias is an alias of real-name",
+      "description": "a repo base name lookup by alias",
+      "provider_state": "alias is an alias of repo-base-name",
       "request": {
         "method": "get",
-        "path": "/real-name",
+        "path": "/repo-base-name",
         "query": "alias=alias-for-the-real-repo"
       },
       "response": {
@@ -51,11 +51,11 @@
       }
     },
     {
-      "description": "a real repo name lookup by alias",
+      "description": "a repo base name lookup by alias",
       "provider_state": "an unknown alias",
       "request": {
         "method": "get",
-        "path": "/real-name",
+        "path": "/repo-base-name",
         "query": "alias=unknown-alias"
       },
       "response": {

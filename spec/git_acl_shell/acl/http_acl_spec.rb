@@ -14,7 +14,7 @@ describe HTTPAcl, :pact => true do
   it "grants access when the key id is allowed to access the repo" do
     acl_service.given("some-key-id is allowed to access the-real-repo")
       .upon_receiving("a permission request")
-      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&name=the-real-repo')
+      .with(method: :get, path: '/permission', query: 'key-id=some-key-id&repo-base-name=the-real-repo')
       .will_respond_with(status: 200)
 
     expect(acl.authorized?('some-key-id', 'the-real-repo')).to be true
@@ -23,7 +23,7 @@ describe HTTPAcl, :pact => true do
   it "denies access when the key id is not allowed to access the repo" do
     acl_service.given("some-key-id is not allowed to access the-real-repo")
       .upon_receiving("a permission request")
-      .with(method: :get, path: '/permission', query: 'keyId=some-key-id&name=the-real-repo')
+      .with(method: :get, path: '/permission', query: 'key-id=some-key-id&repo-base-name=the-real-repo')
       .will_respond_with(status: 403)
 
     expect(acl.authorized?('some-key-id', 'the-real-repo')).to be false

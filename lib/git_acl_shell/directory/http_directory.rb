@@ -7,7 +7,7 @@ module GitAclShell
       include HTTParty
 
       def lookup(repo_alias)
-        response = self.class.get("/real-name", query: { alias: repo_alias })
+        response = self.class.get("/repo-base-name", query: { alias: repo_alias })
         if response.ok?
           return response.body
         else
