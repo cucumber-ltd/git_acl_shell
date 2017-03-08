@@ -46,6 +46,8 @@ describe Shell do
 
       expect(shell.exec(command)).to be false
       expect(kernel.args).to be nil
+      stderr.rewind
+      expect(stderr.read).to eq "OH HAI! I CAN ONLY HALP U WIF GIT COMMANDZ, SRY! KTHXBAI!\n"
     end
 
     it "does not allow a command with appended semicolon" do

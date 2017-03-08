@@ -17,7 +17,7 @@ module GitAclShell
 
     def exec(command)
       if command.nil?
-        @stderr.puts("OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!\n")
+        @stderr.puts("OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!")
         return false
       end
 
@@ -44,6 +44,7 @@ module GitAclShell
           false
         end
       else
+        @stderr.puts("OH HAI! I CAN ONLY HALP U WIF GIT COMMANDZ, SRY! KTHXBAI!")
         false
       end
     end
