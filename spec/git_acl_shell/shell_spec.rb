@@ -32,6 +32,15 @@ describe Shell do
       expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
     end
 
+    it "does not allow interactive sessions (no command)" do
+      command = nil
+
+      expect(shell.exec(command)).to be false
+      expect(kernel.args).to be nil
+      stderr.rewind
+      expect(stderr.read).to eq "OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!\n"
+    end
+
     it "does not allow `rm`" do
       command = "rm -rf tmp"
 

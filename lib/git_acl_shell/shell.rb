@@ -16,6 +16,11 @@ module GitAclShell
     end
 
     def exec(command)
+      if command.nil?
+        @stderr.puts("OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!\n")
+        return false
+      end
+
       args = Shellwords.shellwords(command)
       if whitelist?(args)
         repo_path = args.pop
