@@ -76,7 +76,7 @@ describe Shell do
 
       expect(shell.exec(command)).to be false
       stderr.rewind
-      expect(stderr.read).to eq "Access denied\n"
+      expect(stderr.read).to eq "You've successfully authenticated, but you don't have access to this repo\n"
     end
   end
 

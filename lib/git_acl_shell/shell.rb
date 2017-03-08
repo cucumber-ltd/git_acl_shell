@@ -40,7 +40,7 @@ module GitAclShell
           @kernel.exec(*args)
           true
         else
-          @stderr.puts("Access denied")
+          @stderr.puts("You've successfully authenticated, but you don't have access to this repo")
           false
         end
       else
