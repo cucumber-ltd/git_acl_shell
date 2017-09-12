@@ -8,7 +8,7 @@
   "interactions": [
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is allowed to access the-real-repo",
+      "providerState": "some-key-id is allowed to access the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
@@ -22,7 +22,7 @@
     },
     {
       "description": "a permission request",
-      "provider_state": "some-key-id is not allowed to access the-real-repo",
+      "providerState": "some-key-id is not allowed to access the-real-repo",
       "request": {
         "method": "get",
         "path": "/permission",
@@ -36,7 +36,7 @@
     },
     {
       "description": "a repo base name lookup by alias",
-      "provider_state": "alias is an alias of repo-base-name",
+      "providerState": "alias is an alias of repo-base-name",
       "request": {
         "method": "get",
         "path": "/repo-base-name",
@@ -52,7 +52,7 @@
     },
     {
       "description": "a repo base name lookup by alias",
-      "provider_state": "an unknown alias",
+      "providerState": "an unknown alias",
       "request": {
         "method": "get",
         "path": "/repo-base-name",
@@ -66,6 +66,8 @@
     }
   ],
   "metadata": {
-    "pactSpecificationVersion": "1.0.0"
+    "pactSpecification": {
+      "version": "1.0.0"
+    }
   }
 }
