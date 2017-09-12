@@ -38,7 +38,7 @@ describe Shell do
       expect(shell.exec(command)).to be false
       expect(kernel.args).to be nil
       stderr.rewind
-      expect(stderr.read).to eq "OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!\n"
+      expect(stderr.read).to eq "#{GitAclShell::Shell::NO_SHELL_ACCESS_MESSAGE}\n"
     end
 
     it "does not allow `rm`" do
@@ -47,7 +47,7 @@ describe Shell do
       expect(shell.exec(command)).to be false
       expect(kernel.args).to be nil
       stderr.rewind
-      expect(stderr.read).to eq "OH HAI! I CAN ONLY HALP U WIF GIT COMMANDZ, SRY! KTHXBAI!\n"
+      expect(stderr.read).to eq "#{GitAclShell::Shell::COMMAND_DENIED_MESSAGE}\n"
     end
 
     it "does not allow a command with appended semicolon" do
@@ -76,7 +76,7 @@ describe Shell do
 
       expect(shell.exec(command)).to be false
       stderr.rewind
-      expect(stderr.read).to eq "You've successfully authenticated, but you don't have access to this repo\n"
+      expect(stderr.read).to eq "#{GitAclShell::Shell::ACCESS_DENIED_MESSAGE}\n"
     end
   end
 

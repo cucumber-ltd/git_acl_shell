@@ -6,6 +6,9 @@ module GitAclShell
     # See https://git-scm.com/docs/git-shell#_commands
     #                     (git push)       (git fetch)     (git archive)
     COMMAND_WHITELIST = %w(git-receive-pack git-upload-pack git-upload-archive).freeze
+    NO_SHELL_ACCESS_MESSAGE = ENV['git_acl_shell_no_shell_access_message'] || "You've succesfully authenticated, but shell access is not available."
+    ACCESS_DENIED_MESSAGE = ENV['git_acl_shell_access_denied_message'] || "You've successfully authenticated, but you don't have access to this repo."
+    COMMAND_DENIED_MESSAGE = ENV['git_acl_shell_command_denied_message'] || "You've successfully authenticated, but the only allowed commands are #{COMMAND_WHITELIST.join(', ')}."
 
     def initialize(key_id, acl:, directory:, kernel: Kernel, stderr: $stderr)
       @key_id    = key_id
@@ -17,7 +20,7 @@ module GitAclShell
 
     def exec(command)
       if command.nil?
-        @stderr.puts("OH HAI! U HAS LOGGD IN BUT WE DOAN PROVIDE SHELL ACCES. KTHXBAI!")
+        @stderr.puts(NO_SHELL_ACCESS_MESSAGE)
         return false
       end
 
@@ -40,11 +43,11 @@ module GitAclShell
           @kernel.exec(*args)
           true
         else
-          @stderr.puts("You've successfully authenticated, but you don't have access to this repo")
+          @stderr.puts(ACCESS_DENIED_MESSAGE)
           false
         end
       else
-        @stderr.puts("OH HAI! I CAN ONLY HALP U WIF GIT COMMANDZ, SRY! KTHXBAI!")
+        @stderr.puts(COMMAND_DENIED_MESSAGE)
         false
       end
     end
