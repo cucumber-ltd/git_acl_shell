@@ -14,13 +14,13 @@ describe HTTPDirectory, :pact => true do
   it "returns the real name when an alias exists" do
     acl_service.given("alias is an alias of repo-base-name")
       .upon_receiving("a repo base name lookup by alias")
-      .with(method: :get, path: '/repo-base-name', query: 'alias=alias-for-the-real-repo')
+      .with(method: :get, path: '/repo-base-name', query: 'alias=ali%C3%A0s-for-the-real-repo')
       .will_respond_with(
         status: 200,
         headers: {'Content-Type' => 'text/plain; charset=utf-8'},
         body: 'the-real-repo'
       )
-    expect(directory.lookup('alias-for-the-real-repo')).to eq('the-real-repo')
+    expect(directory.lookup('aliàs-for-the-real-repo')).to eq('the-real-repo')
   end
 
   it "raises an UnknownAlias error when the alias does not exist" do
