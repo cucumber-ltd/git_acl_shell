@@ -92,15 +92,6 @@ describe Shell do
       expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
     end
 
-    it "decodes the alias before looking up the real name" do
-      expect(directory).to receive(:lookup).with("complex/+alias").and_return("repo-name")
-
-      command = "git-upload-pack '/home/git/complex%2F%2Balias.git'"
-
-      expect(shell.exec(command)).to be true
-      expect(kernel.args).to eq ["git-upload-pack", "/home/git/repo-name.git"]
-    end
-
     it "does not execute if the alias is unknown" do
       expect(directory).to receive(:lookup).and_raise(UnknownAlias)
 

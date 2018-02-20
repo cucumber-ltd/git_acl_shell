@@ -28,7 +28,7 @@ module GitAclShell
       if whitelist?(args)
         repo_path = args.pop
         repo_extension = File.extname(repo_path)
-        repo_alias = URI.decode(File.basename(repo_path, repo_extension))
+        repo_alias = File.basename(repo_path, repo_extension)
 
         begin
           repo_name = @directory.lookup(repo_alias)
